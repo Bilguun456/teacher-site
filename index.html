@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aibek Kudaibergenov — Class 9B Memorial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #fdf8f0;
+      --gold: #c9a84c;
+      --gold-light: #e8c96e;
+      --gold-dark: #a07830;
+      --brown: #2c1810;
+      --brown-mid: #5a3820;
+      --brown-light: #8b5e3c;
+      --white: #ffffff;
+      --shadow: rgba(44,24,16,0.12);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--cream);
+      color: var(--brown);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* PASSWORD SCREEN */
+    #password-screen {
+      position: fixed; inset: 0; z-index: 9999;
+      background: linear-gradient(135deg, #2c1810 0%, #5a3820 50%, #2c1810 100%);
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    #password-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .pw-box {
+      text-align: center;
+      padding: 3rem 2.5rem;
+      background: rgba(253,248,240,0.05);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      max-width: 420px; width: 90%;
+    }
+    .pw-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .pw-box h1 {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 1.8rem;
+      margin-bottom: 0.4rem;
+    }
+    .pw-box p { color: rgba(253,248,240,0.7); font-size: 0.95rem; margin-bottom: 2rem; }
+    #pw-input {
+      width: 100%; padding: 0.9rem 1.2rem;
+      background: rgba(253,248,240,0.08);
+      border: 1.5px solid rgba(201,168,76,0.4);
+      border-radius: 8px;
+      color: var(--cream); font-size: 1.1rem;
+      font-family: 'Lato', sans-serif;
+      letter-spacing: 0.15em; text-align: center;
+      outline: none; transition: border-color 0.3s;
+      margin-bottom: 0.7rem;
+    }
+    #pw-input:focus { border-color: var(--gold); }
+    #pw-input.error { border-color: #e05252; animation: shake 0.4s ease; }
+    @keyframes shake {
+      0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 60%{transform:translateX(8px)}
+    }
+    #pw-error {
+      color: #e08080; font-size: 0.85rem; min-height: 1.4em;
+      transition: opacity 0.3s; opacity: 0; margin-bottom: 0.7rem;
+    }
+    #pw-error.visible { opacity: 1; }
+    #pw-btn {
+      width: 100%; padding: 0.9rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      border: none; border-radius: 8px;
+      color: var(--brown); font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; font-weight: 600;
+      cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #pw-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201,168,76,0.4); }
+
+    /* MAIN SITE */
+    #site { opacity: 0; transition: opacity 1s ease; }
+    #site.visible { opacity: 1; }
+
+    /* FADE-IN ON SCROLL */
+    .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* HERO */
+    #hero {
+      position: relative; height: 100vh; min-height: 500px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; cursor: pointer;
+    }
+    #hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #3d2212 0%, #6b3a1f 40%, #3d2212 100%);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    #hero-img { width:100%;height:100%;object-fit:cover;opacity:0.55;display:none; }
+    #hero-placeholder {
+      display: flex; flex-direction: column; align-items: center;
+      color: rgba(201,168,76,0.6); gap: 0.8rem; pointer-events: none;
+    }
+    #hero-placeholder svg { width: 64px; height: 64px; }
+    #hero-placeholder span { font-family:'Lato',sans-serif; font-size:1rem; letter-spacing:0.08em; }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(44,24,16,0.3) 0%, rgba(44,24,16,0.6) 100%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative; z-index: 2; text-align: center; color: var(--cream);
+      padding: 2rem; pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-family:'Lato',sans-serif; font-weight:300;
+      letter-spacing:0.3em; text-transform:uppercase;
+      font-size:0.85rem; color:var(--gold-light); margin-bottom:1.2rem;
+    }
+    .hero-title {
+      font-family:'Playfair Display',serif; font-style:italic;
+      font-size:clamp(2.2rem,6vw,4.5rem);
+      line-height:1.2; margin-bottom:1.5rem;
+      text-shadow:0 2px 20px rgba(44,24,16,0.6);
+    }
+    .hero-class {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(1rem,2.5vw,1.4rem);
+      color:var(--gold-light); letter-spacing:0.05em;
+    }
+    .hero-upload-hint {
+      position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
+      z-index:2; color:rgba(253,248,240,0.5);
+      font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase;
+      display:flex; align-items:center; gap:0.5rem;
+      animation:bounce 2s infinite; white-space:nowrap;
+    }
+    @keyframes bounce {
+      0%,100%{transform:translateX(-50%) translateY(0)}
+      50%{transform:translateX(-50%) translateY(-6px)}
+    }
+    #hero-input { display:none; }
+
+    /* DIVIDER */
+    .golden-divider {
+      display:flex; align-items:center; gap:1.2rem;
+      margin:0 auto 3rem; max-width:320px;
+    }
+    .golden-divider::before,.golden-divider::after {
+      content:''; flex:1; height:1px;
+      background:linear-gradient(to right, transparent, var(--gold));
+    }
+    .golden-divider::after { background:linear-gradient(to left, transparent, var(--gold)); }
+    .golden-divider-icon { color:var(--gold); font-size:1.2rem; }
+
+    /* SECTION */
+    .section { padding:6rem 1.5rem; }
+    .section-inner { max-width:1100px; margin:0 auto; }
+    .section-label {
+      font-family:'Lato',sans-serif; font-weight:300;
+      letter-spacing:0.3em; text-transform:uppercase;
+      font-size:0.75rem; color:var(--gold);
+      margin-bottom:0.8rem; display:block;
+    }
+    .section-title {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(1.8rem,4vw,2.8rem);
+      color:var(--brown); margin-bottom:3rem; line-height:1.3;
+    }
+
+    /* ABOUT */
+    #about { background:var(--white); }
+    .about-grid {
+      display:grid; grid-template-columns:1fr 1.4fr;
+      gap:4rem; align-items:start;
+    }
+    @media(max-width:700px){.about-grid{grid-template-columns:1fr;gap:2.5rem;}}
+    .about-photo-wrap {
+      position:relative; cursor:pointer;
+      border-radius:4px; overflow:hidden;
+      box-shadow:8px 8px 0 var(--gold), 16px 16px 0 rgba(201,168,76,0.2);
+    }
+    .about-photo-placeholder {
+      width:100%; aspect-ratio:3/4;
+      background:linear-gradient(135deg,#e8ddd0 0%,#d4c4b0 100%);
+      display:flex; flex-direction:column; align-items:center;
+      justify-content:center; gap:0.8rem; color:var(--brown-light);
+    }
+    .about-photo-placeholder svg { width:48px; height:48px; opacity:0.5; }
+    .about-photo-placeholder span { font-size:0.85rem; letter-spacing:0.08em; opacity:0.7; }
+    #about-img { width:100%; height:100%; object-fit:cover; display:none; }
+    #about-input { display:none; }
+    .about-info h2 {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(1.8rem,3.5vw,2.4rem);
+      color:var(--brown); margin-bottom:0.3rem;
+    }
+    .about-origin {
+      color:var(--gold-dark); font-style:italic;
+      font-family:'Playfair Display',serif; font-size:1.05rem;
+      margin-bottom:1.2rem;
+    }
+    .about-tags { display:flex; flex-wrap:wrap; gap:0.6rem; margin-bottom:2rem; }
+    .tag {
+      background:var(--cream); border:1px solid var(--gold);
+      color:var(--brown-mid); border-radius:20px;
+      padding:0.25rem 0.9rem; font-size:0.82rem; font-weight:700;
+      letter-spacing:0.04em;
+    }
+    .editable-para {
+      border:none; outline:none; width:100%;
+      font-family:'Lato',sans-serif; font-size:1rem;
+      color:var(--brown-mid); line-height:1.8;
+      background:transparent; resize:none;
+      border-bottom:1.5px dashed rgba(201,168,76,0.3);
+      padding-bottom:0.5rem; min-height:140px;
+      transition:border-color 0.3s;
+    }
+    .editable-para:focus { border-color:var(--gold); }
+    .edit-hint {
+      font-size:0.75rem; color:var(--gold); margin-top:0.4rem;
+      opacity:0.7; display:flex; align-items:center; gap:0.3rem;
+    }
+
+    /* MESSAGES */
+    #messages { background:var(--cream); }
+    .messages-intro {
+      font-size:1.05rem; color:var(--brown-mid);
+      max-width:560px; margin-bottom:3.5rem;
+    }
+    .cards-grid { columns:4; column-gap:1.5rem; }
+    @media(max-width:1000px){.cards-grid{columns:3;}}
+    @media(max-width:700px){.cards-grid{columns:2;}}
+    @media(max-width:430px){.cards-grid{columns:1;}}
+    .polaroid {
+      break-inside:avoid; display:inline-block; width:100%;
+      background:var(--white); padding:0.9rem 0.9rem 1.4rem;
+      box-shadow:3px 3px 14px var(--shadow);
+      margin-bottom:1.5rem;
+      position:relative;
+      transition:transform 0.25s, box-shadow 0.25s;
+    }
+    .polaroid:hover { box-shadow:6px 8px 24px rgba(44,24,16,0.18); }
+    .polaroid:nth-child(odd)       { transform:rotate(-1.5deg); }
+    .polaroid:nth-child(odd):hover { transform:rotate(-1.5deg) scale(1.03); }
+    .polaroid:nth-child(even)       { transform:rotate(1.2deg); }
+    .polaroid:nth-child(even):hover { transform:rotate(1.2deg) scale(1.03); }
+    .polaroid:nth-child(3n)       { transform:rotate(-0.5deg); }
+    .polaroid:nth-child(3n):hover { transform:rotate(-0.5deg) scale(1.03); }
+    .polaroid-photo {
+      width:100%; aspect-ratio:1/1; overflow:hidden;
+      background:linear-gradient(135deg,#e8ddd0,#d4c4b0);
+      display:flex; align-items:center; justify-content:center;
+      flex-direction:column; gap:0.4rem; color:rgba(90,56,32,0.4);
+      margin-bottom:0.9rem; position:relative; cursor:pointer;
+    }
+    .polaroid-photo img { width:100%;height:100%;object-fit:cover;display:none;position:absolute;inset:0; }
+    .polaroid-photo svg { width:32px;height:32px; }
+    .polaroid-photo span { font-size:0.7rem;letter-spacing:0.08em; }
+    .polaroid input[type="file"] { display:none; }
+    .student-name {
+      border:none; outline:none; width:100%;
+      font-family:'Playfair Display',serif; font-weight:600;
+      font-size:0.95rem; color:var(--brown);
+      background:transparent; text-align:center;
+      border-bottom:1px dashed rgba(201,168,76,0.4);
+      padding:0.2rem 0; margin-bottom:0.6rem;
+    }
+    .student-msg {
+      border:none; outline:none; width:100%;
+      font-family:'Lato',sans-serif; font-size:0.8rem;
+      color:var(--brown-mid); line-height:1.65;
+      background:transparent; resize:none; min-height:80px;
+    }
+    .student-name:focus,.student-msg:focus { background:rgba(201,168,76,0.05); border-radius:3px; }
+
+    /* FINAL */
+    #final {
+      background:linear-gradient(135deg,#3d2212 0%,#6b3a1f 50%,#3d2212 100%);
+      color:var(--cream); text-align:center;
+    }
+    #final .section-label { color:var(--gold-light); }
+    #final .section-title { color:var(--cream); margin-bottom:2rem; }
+    #final .golden-divider::before { background:linear-gradient(to right,transparent,var(--gold-light)); }
+    #final .golden-divider::after  { background:linear-gradient(to left,transparent,var(--gold-light)); }
+    .final-textarea {
+      width:100%; max-width:780px; margin:0 auto;
+      border:none; outline:none;
+      background:rgba(253,248,240,0.07);
+      border:1px solid rgba(201,168,76,0.25);
+      border-radius:8px; padding:2rem;
+      font-family:'Playfair Display',serif; font-style:italic;
+      font-size:clamp(1.05rem,2vw,1.3rem);
+      color:var(--cream); line-height:1.9;
+      text-align:center; resize:vertical; min-height:200px;
+      transition:border-color 0.3s, background 0.3s;
+      display:block;
+    }
+    .final-textarea:focus {
+      border-color:rgba(201,168,76,0.6);
+      background:rgba(253,248,240,0.1);
+    }
+    .final-textarea::placeholder { color:rgba(253,248,240,0.35); }
+    .final-hint { margin-top:1rem; color:rgba(201,168,76,0.6); font-size:0.8rem; letter-spacing:0.1em; }
+
+    /* FOOTER */
+    footer {
+      background:var(--brown); color:rgba(253,248,240,0.6);
+      text-align:center; padding:2.5rem 1rem;
+      font-size:0.85rem; letter-spacing:0.2em; text-transform:uppercase;
+    }
+    footer strong { color:var(--gold); }
+
+    /* SAVE BUTTON */
+    #save-btn {
+      position:fixed; bottom:2rem; right:2rem; z-index:100;
+      background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+      color:var(--brown); border:none; border-radius:50px;
+      padding:0.75rem 1.5rem; font-family:'Lato',sans-serif;
+      font-weight:700; font-size:0.85rem; letter-spacing:0.08em;
+      cursor:pointer; box-shadow:0 4px 20px rgba(201,168,76,0.4);
+      display:flex; align-items:center; gap:0.5rem;
+      opacity:0; pointer-events:none;
+      transition:opacity 0.5s ease, transform 0.2s, box-shadow 0.2s;
+    }
+    #save-btn.visible { opacity:1; pointer-events:all; }
+    #save-btn:hover { transform:translateY(-3px); box-shadow:0 8px 28px rgba(201,168,76,0.5); }
+    #save-btn.copied { background:linear-gradient(135deg,#6abf69,#4a9e48); color:#fff; }
+    #save-toast {
+      position:fixed; bottom:5.5rem; right:2rem; z-index:100;
+      background:var(--brown); color:var(--gold);
+      padding:0.6rem 1.2rem; border-radius:6px;
+      font-size:0.82rem; letter-spacing:0.06em;
+      opacity:0; pointer-events:none;
+      transition:opacity 0.4s ease; border:1px solid var(--gold);
+    }
+    #save-toast.visible { opacity:1; }
+  </style>
+</head>
+<body>
+
+<!-- PASSWORD SCREEN -->
+<div id="password-screen">
+  <div class="pw-box">
+    <div class="pw-icon">🌻</div>
+    <h1>A Private Memory</h1>
+    <p>Enter the password to open this memorial</p>
+    <input type="password" id="pw-input" placeholder="••••••••••" autocomplete="off" />
+    <p id="pw-error">Incorrect password. Please try again.</p>
+    <button id="pw-btn">Open &rarr;</button>
+  </div>
+</div>
+
+<!-- MAIN SITE -->
+<div id="site">
+
+  <!-- Floating Save Button -->
+  <button id="save-btn" aria-label="Save all messages">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2.5"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+      <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+    </svg>
+    Save Messages
+  </button>
+  <div id="save-toast">Copied to clipboard!</div>
+
+  <!-- 1. HERO -->
+  <section id="hero" onclick="document.getElementById('hero-input').click()">
+    <div id="hero-bg">
+      <div id="hero-placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+        <span>Click to upload class photo</span>
+      </div>
+      <img id="hero-img" alt="Class 9B photo" />
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">In memory &amp; gratitude</p>
+      <h1 class="hero-title">To the one who<br/>believed in us</h1>
+      <p class="hero-class">9B &mdash; 2022 / 2024</p>
+    </div>
+    <div class="hero-upload-hint">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
+        <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+      </svg>
+      Click anywhere to upload class photo
+    </div>
+    <input type="file" id="hero-input" accept="image/*" />
+  </section>
+
+  <!-- 2. ABOUT HIM -->
+  <section id="about" class="section">
+    <div class="section-inner">
+      <div class="about-grid fade-in">
+        <div>
+          <div class="about-photo-wrap" id="about-photo-wrap"
+               onclick="document.getElementById('about-input').click()">
+            <div class="about-photo-placeholder" id="about-placeholder">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.2"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <span>Click to upload photo</span>
+            </div>
+            <img id="about-img" alt="Aibek Kudaibergenov" />
+          </div>
+          <input type="file" id="about-input" accept="image/*" />
+        </div>
+        <div class="about-info">
+          <span class="section-label">Our Teacher</span>
+          <h2>Aibek Kudaibergenov</h2>
+          <p class="about-origin">&#127987;&#65039;&nbsp; From Kyrgyzstan</p>
+          <div class="about-tags">
+            <span class="tag">Homeroom Teacher</span>
+            <span class="tag">Mathematics</span>
+            <span class="tag">Computer Science</span>
+            <span class="tag">2 Years with 9B</span>
+          </div>
+          <div class="golden-divider" style="margin:0 0 1.5rem;max-width:100%;">
+            <div class="golden-divider-icon">✦</div>
+          </div>
+          <textarea class="editable-para" id="about-text" rows="6">He wasn't just a teacher — he was someone who saw the potential in each of us before we could see it in ourselves. With warmth, patience, and a quiet kind of wisdom, Aibek Kudaibergenov turned classroom walls into a place that felt like home. Two years flew by, but the lessons he taught us — about mathematics, about computers, and about life — will stay with us always.</textarea>
+          <p class="edit-hint">&#9998; Click to edit this text</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. STUDENT MESSAGES -->
+  <section id="messages" class="section">
+    <div class="section-inner">
+      <div class="fade-in">
+        <span class="section-label">From the heart</span>
+        <h2 class="section-title">Letters from Class 9B</h2>
+        <p class="messages-intro">Twenty-six voices, twenty-six hearts — each with something to say to the teacher who made a difference.</p>
+      </div>
+      <div class="cards-grid" id="cards-grid"></div>
+    </div>
+  </section>
+
+  <!-- 4. FINAL MESSAGE -->
+  <section id="final" class="section">
+    <div class="section-inner">
+      <div class="fade-in">
+        <span class="section-label">From all of us</span>
+        <h2 class="section-title">Our Final Words</h2>
+        <div class="golden-divider" style="margin-bottom:2.5rem;">
+          <div class="golden-divider-icon">✦</div>
+        </div>
+        <textarea class="final-textarea" id="final-msg"
+          placeholder="Dear Aibek, as a class we want you to know..."></textarea>
+        <p class="final-hint">&#9998; Click to personalise this message</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <strong>Class 9B</strong>&nbsp;&middot;&nbsp;2024&nbsp;&middot;&nbsp;With love
+  </footer>
+
+</div><!-- /#site -->
+
+<script>
+  /* PASSWORD */
+  const PASS = 'aibek2025';
+  const pwScreen = document.getElementById('password-screen');
+  const site     = document.getElementById('site');
+  const pwInput  = document.getElementById('pw-input');
+  const pwError  = document.getElementById('pw-error');
+  const pwBtn    = document.getElementById('pw-btn');
+  const saveBtn  = document.getElementById('save-btn');
+
+  function tryUnlock() {
+    if (pwInput.value === PASS) {
+      pwScreen.classList.add('hidden');
+      site.classList.add('visible');
+      saveBtn.classList.add('visible');
+      initObserver();
+    } else {
+      pwInput.classList.add('error');
+      pwError.classList.add('visible');
+      pwInput.value = '';
+      setTimeout(() => pwInput.classList.remove('error'), 500);
+    }
+  }
+
+  pwBtn.addEventListener('click', tryUnlock);
+  pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+  pwInput.addEventListener('input', () => pwError.classList.remove('visible'));
+
+  /* HERO PHOTO */
+  const heroInput = document.getElementById('hero-input');
+  const heroImg   = document.getElementById('hero-img');
+  const heroPh    = document.getElementById('hero-placeholder');
+
+  heroInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    heroImg.src = URL.createObjectURL(file);
+    heroImg.style.display = 'block';
+    heroPh.style.display  = 'none';
+  });
+
+  /* ABOUT PHOTO */
+  const aboutInput = document.getElementById('about-input');
+  const aboutImg   = document.getElementById('about-img');
+  const aboutPh    = document.getElementById('about-placeholder');
+
+  aboutInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    aboutImg.src = URL.createObjectURL(file);
+    aboutImg.style.display = 'block';
+    aboutPh.style.display  = 'none';
+  });
+
+  /* BUILD 26 STUDENT CARDS */
+  const defaultNames = Array.from({length: 26}, (_, i) => `Student ${i + 1}`);
+  const grid = document.getElementById('cards-grid');
+
+  defaultNames.forEach((name, i) => {
+    const card = document.createElement('div');
+    card.className = 'polaroid fade-in';
+
+    /* photo area */
+    const photoDiv = document.createElement('div');
+    photoDiv.className = 'polaroid-photo';
+
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const camSvg = document.createElementNS(svgNS, 'svg');
+    camSvg.setAttribute('viewBox','0 0 24 24');
+    camSvg.setAttribute('fill','none');
+    camSvg.setAttribute('stroke','currentColor');
+    camSvg.setAttribute('stroke-width','1.5');
+    camSvg.setAttribute('stroke-linecap','round');
+    camSvg.setAttribute('stroke-linejoin','round');
+    camSvg.innerHTML = '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>';
+
+    const hint = document.createElement('span');
+    hint.textContent = 'Add photo';
+
+    const img = document.createElement('img');
+    img.alt = name;
+
+    const fileIn = document.createElement('input');
+    fileIn.type = 'file';
+    fileIn.accept = 'image/*';
+
+    photoDiv.append(camSvg, hint, img, fileIn);
+
+    photoDiv.addEventListener('click', e => {
+      e.stopPropagation();
+      fileIn.click();
+    });
+    fileIn.addEventListener('change', ev => {
+      const file = ev.target.files[0];
+      if (!file) return;
+      img.src = URL.createObjectURL(file);
+      img.style.display = 'block';
+      camSvg.style.display = 'none';
+      hint.style.display   = 'none';
+    });
+
+    /* name input */
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.className = 'student-name';
+    nameInput.value = name;
+    nameInput.addEventListener('click', e => e.stopPropagation());
+
+    /* message textarea */
+    const msgArea = document.createElement('textarea');
+    msgArea.className = 'student-msg';
+    msgArea.placeholder = 'Dear Aibek, I remember the day...';
+    msgArea.rows = 4;
+    msgArea.addEventListener('click', e => e.stopPropagation());
+    msgArea.addEventListener('input', () => {
+      msgArea.style.height = 'auto';
+      msgArea.style.height = msgArea.scrollHeight + 'px';
+    });
+
+    card.append(photoDiv, nameInput, msgArea);
+    grid.appendChild(card);
+  });
+
+  /* SCROLL FADE-IN */
+  function initObserver() {
+    const els = document.querySelectorAll('.fade-in');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+  }
+
+  /* SAVE MESSAGES */
+  document.getElementById('save-btn').addEventListener('click', () => {
+    const lines = ['=== CLASS 9B — MEMORIAL MESSAGES ===\n'];
+
+    lines.push('[ ABOUT AIBEK ]\n' + document.getElementById('about-text').value + '\n');
+
+    const cards = document.querySelectorAll('.polaroid');
+    lines.push('\n[ STUDENT MESSAGES ]');
+    cards.forEach(card => {
+      const name = card.querySelector('.student-name').value;
+      const msg  = card.querySelector('.student-msg').value;
+      if (name || msg) lines.push('\n' + name + ':\n' + msg);
+    });
+
+    const final = document.getElementById('final-msg').value;
+    if (final) lines.push('\n\n[ FINAL CLASS MESSAGE ]\n' + final);
+
+    navigator.clipboard.writeText(lines.join('\n')).then(() => {
+      const btn   = document.getElementById('save-btn');
+      const toast = document.getElementById('save-toast');
+      btn.classList.add('copied');
+      toast.classList.add('visible');
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        toast.classList.remove('visible');
+      }, 2500);
+    }).catch(() => {
+      alert('Could not access clipboard. Please allow clipboard permissions.');
+    });
+  });
+</script>
+</body>
+</html>
