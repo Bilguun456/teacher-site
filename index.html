@@ -237,12 +237,12 @@
       font-size:1.05rem; color:var(--brown-mid);
       max-width:560px; margin-bottom:3.5rem;
     }
-    .cards-grid { columns:4; column-gap:1.5rem; }
-    @media(max-width:1000px){.cards-grid{columns:3;}}
-    @media(max-width:700px){.cards-grid{columns:2;}}
-    @media(max-width:430px){.cards-grid{columns:1;}}
+    .cards-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; }
+    @media(max-width:1000px){.cards-grid{grid-template-columns:repeat(3,1fr);}}
+    @media(max-width:700px){.cards-grid{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:430px){.cards-grid{grid-template-columns:1fr;}}
     .polaroid {
-      break-inside:avoid; display:inline-block; width:100%;
+      width:100%;
       background:var(--white); padding:0.9rem 0.9rem 1.4rem;
       box-shadow:3px 3px 14px var(--shadow);
       margin-bottom:1.5rem;
@@ -497,6 +497,7 @@
       site.classList.add('visible');
       saveBtn.classList.add('visible');
       initObserver();
+      document.querySelectorAll('#messages .fade-in').forEach(el => el.classList.add('visible'));
     } else {
       pwInput.classList.add('error');
       pwError.classList.add('visible');
