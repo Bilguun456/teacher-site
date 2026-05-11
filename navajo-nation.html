@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navajo Nation — Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Lato:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --dark:#140804;--panel:#2A1306;--card:#3A1A08;
+  --terra:#C8522A;--amber:#CE8D18;--gold:#E7B840;
+  --sand:#E2CF95;--cream:#F5EAD0;
+  --teal:#2D8A8A;--teal-lt:#4DB8B8;
+  --bord:rgba(200,82,42,.32);
+}
+body{background:var(--dark);font-family:'Lato',sans-serif;color:var(--cream);overflow:hidden;height:100vh;width:100vw}
+
+/* ── ZIGZAG BANDS ── */
+.band{
+  height:22px;flex-shrink:0;
+  background:
+    linear-gradient(135deg,var(--terra) 25%,transparent 25%) -11px 0,
+    linear-gradient(225deg,var(--terra) 25%,transparent 25%) -11px 0,
+    linear-gradient(315deg,var(--terra) 25%,transparent 25%),
+    linear-gradient(45deg, var(--terra) 25%,transparent 25%);
+  background-size:22px 22px;background-color:var(--amber);
+}
+.band.b2{
+  background:
+    linear-gradient(135deg,var(--teal) 25%,transparent 25%) -11px 0,
+    linear-gradient(225deg,var(--teal) 25%,transparent 25%) -11px 0,
+    linear-gradient(315deg,var(--teal) 25%,transparent 25%),
+    linear-gradient(45deg, var(--teal) 25%,transparent 25%);
+  background-size:22px 22px;background-color:var(--panel);
+}
+
+/* ── LAYOUT ── */
+#app{display:flex;flex-direction:column;height:100vh}
+#stage{position:relative;flex:1;overflow:hidden}
+.slide{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;transition:opacity .38s ease;
+}
+.slide.active{opacity:1;pointer-events:auto}
+
+/* ── SLIDE HEADER ── */
+.sh{
+  padding:20px 56px 14px 66px;border-bottom:1.5px solid rgba(200,82,42,.45);
+  flex-shrink:0;background:var(--panel);position:relative;
+}
+.sh::before{content:'';position:absolute;left:0;top:0;bottom:0;width:8px;background:linear-gradient(to bottom,var(--terra),var(--amber))}
+.sh h2{font-family:'Cinzel',serif;font-size:1.75rem;font-weight:600;color:var(--gold);letter-spacing:.07em;text-transform:uppercase}
+.sh .sub{font-size:.8rem;color:var(--teal-lt);font-style:italic;letter-spacing:.06em;margin-top:3px}
+
+/* ── CONTENT AREA ── */
+.sc{flex:1;padding:20px 56px;overflow-y:auto;background:var(--dark)}
+.sc::-webkit-scrollbar{width:4px}
+.sc::-webkit-scrollbar-thumb{background:var(--terra);border-radius:2px}
+
+/* ── GRID HELPERS ── */
+.c2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.c3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+
+/* ── CARD ── */
+.card{background:var(--card);border:1px solid var(--bord);border-radius:8px;padding:14px 18px;margin-bottom:13px}
+.ct{font-family:'Cinzel',serif;font-size:.88rem;color:var(--amber);letter-spacing:.05em;border-bottom:1px solid var(--bord);padding-bottom:6px;margin-bottom:9px}
+
+/* ── BULLET LIST ── */
+ul.b{list-style:none}
+ul.b li{position:relative;padding:3px 0 3px 18px;font-size:.88rem;color:var(--sand);line-height:1.52}
+ul.b li::before{content:'◆';position:absolute;left:0;top:6px;font-size:.48rem;color:var(--terra)}
+ul.b li strong{color:var(--cream)}
+
+/* ── STAT CHIP ── */
+.stat{background:linear-gradient(135deg,rgba(200,82,42,.18),rgba(45,138,138,.13));border:1px solid var(--teal);border-radius:8px;padding:12px 8px;text-align:center}
+.stn{font-family:'Cinzel',serif;font-size:1.9rem;color:var(--gold);font-weight:900;line-height:1}
+.stl{font-size:.72rem;color:var(--teal-lt);text-transform:uppercase;letter-spacing:.09em;margin-top:4px}
+
+/* ── ACCENT BARS ── */
+.ar{border-left:4px solid var(--terra);background:rgba(168,52,32,.12);border-radius:0 6px 6px 0;padding:9px 15px;margin-bottom:9px}
+.at{border-left:4px solid var(--teal);background:rgba(45,138,138,.12);border-radius:0 6px 6px 0;padding:9px 15px;margin-bottom:9px}
+.ar p,.at p{font-size:.86rem;color:var(--sand);line-height:1.52}
+.ar strong,.at strong{color:var(--cream)}
+
+/* ── TIMELINE ── */
+.tl{position:relative;padding-left:26px}
+.tl::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(to bottom,var(--terra),var(--teal))}
+.ti{position:relative;margin-bottom:12px}
+.ti::before{content:'';position:absolute;left:-21px;top:6px;width:9px;height:9px;border-radius:50%;background:var(--amber);border:2px solid var(--dark)}
+.ty{font-family:'Cinzel',serif;font-size:.8rem;color:var(--amber);font-weight:600}
+.tx{font-size:.86rem;color:var(--sand);line-height:1.44}
+
+/* ── FACT GRID ── */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.fc{background:var(--card);border:1px solid var(--bord);border-radius:8px;padding:14px 16px}
+.fi{font-size:1.55rem;margin-bottom:5px}
+.ft{font-family:'Cinzel',serif;font-size:.8rem;color:var(--amber);margin-bottom:5px;letter-spacing:.04em}
+.fp{font-size:.85rem;color:var(--sand);line-height:1.48}
+
+/* ── SOURCES ── */
+.src{background:var(--card);border:1px solid var(--bord);border-radius:6px;padding:11px 16px;margin-bottom:9px;font-size:.86rem;color:var(--sand);line-height:1.62}
+.sn{font-family:'Cinzel',serif;color:var(--amber);font-weight:600;margin-right:7px}
+
+/* ── CONTROLS ── */
+#ctrl{height:54px;display:flex;align-items:center;justify-content:center;gap:18px;background:var(--panel);border-top:1.5px solid rgba(200,82,42,.38);flex-shrink:0}
+.btn{background:var(--card);color:var(--cream);border:1px solid var(--terra);border-radius:6px;padding:7px 24px;font-family:'Cinzel',serif;font-size:.95rem;cursor:pointer;transition:background .18s,color .18s,transform .14s;letter-spacing:.04em}
+.btn:hover:not(:disabled){background:var(--terra);color:var(--dark);transform:scale(1.04)}
+.btn:disabled{opacity:.28;cursor:not-allowed}
+#ctr{font-family:'Cinzel',serif;color:var(--amber);font-size:.92rem;min-width:70px;text-align:center;letter-spacing:.1em}
+
+/* ══════════════════════════════════════
+   SLIDE 1 — TITLE
+══════════════════════════════════════ */
+#s1{
+  background:radial-gradient(ellipse at 50% 48%,#3B1D0B 0%,#140804 68%);
+  align-items:center;justify-content:center;text-align:center;gap:0
+}
+.tmain{font-family:'Cinzel',serif;font-size:clamp(3rem,6.5vw,5.2rem);font-weight:900;color:var(--gold);letter-spacing:.13em;text-transform:uppercase;text-shadow:0 0 55px rgba(231,184,64,.32);line-height:1}
+.tdine{font-family:'Cinzel',serif;font-size:1.35rem;color:var(--teal-lt);letter-spacing:.22em;margin:7px 0 18px}
+.trule{width:210px;height:3px;background:linear-gradient(90deg,transparent,var(--terra),var(--gold),var(--teal),var(--gold),var(--terra),transparent);margin:0 auto 26px}
+.tmeta{display:grid;grid-template-columns:1fr 1fr;gap:9px;max-width:540px;width:90%;text-align:left}
+.tbox{background:rgba(42,19,6,.82);border:1px solid rgba(200,82,42,.48);border-radius:6px;padding:8px 14px}
+.tbox.sp{grid-column:1/-1}
+.tlbl{font-size:.6rem;color:var(--amber);letter-spacing:.17em;text-transform:uppercase;margin-bottom:2px}
+.tval{font-size:.9rem;color:var(--cream);font-weight:300}
+</style>
+</head>
+<body>
+<div id="app">
+<div class="band"></div>
+<div id="stage">
+
+<!-- ══ SLIDE 1: TITLE ══ -->
+<div class="slide active" id="s1">
+  <div class="tmain">Navajo Nation</div>
+  <div class="tdine">The Diné People</div>
+  <div class="trule"></div>
+  <div class="tmeta">
+    <div class="tbox sp"><div class="tlbl">Group Name</div><div class="tval">[GROUP NAME]</div></div>
+    <div class="tbox"><div class="tlbl">Student 1</div><div class="tval">[STUDENT 1]</div></div>
+    <div class="tbox"><div class="tlbl">Student 2</div><div class="tval">[STUDENT 2]</div></div>
+    <div class="tbox"><div class="tlbl">Student 3</div><div class="tval">[STUDENT 3]</div></div>
+    <div class="tbox"><div class="tlbl">Student 4</div><div class="tval">[STUDENT 4]</div></div>
+    <div class="tbox sp"><div class="tlbl">Date</div><div class="tval">[DATE]</div></div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 2: LOCATION & POPULATION ══ -->
+<div class="slide" id="s2">
+  <div class="sh"><h2>Location &amp; Population</h2><div class="sub">Where the Diné call home</div></div>
+  <div class="sc">
+    <div class="c2">
+      <div>
+        <div class="card">
+          <div class="ct">Geographic Location</div>
+          <ul class="b">
+            <li>Spans the American Southwest across <strong>northeastern Arizona, northwestern New Mexico, and southeastern Utah</strong> — with a small portion reaching into Colorado</li>
+            <li>Capital city: <strong>Window Rock, Arizona</strong> — named for a natural sandstone arch through which the sky is visible</li>
+            <li>Defined by four sacred mountains: Blanca Peak (E), Mount Taylor (S), San Francisco Peaks (W), Hesperus Peak (N)</li>
+            <li>Nearest major cities include Flagstaff AZ, Albuquerque NM, and Farmington NM</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ct">Territory Size</div>
+          <ul class="b">
+            <li>Covers approximately <strong>27,425 square miles</strong> (71,000 km²)</li>
+            <li>Larger than the entire states of West Virginia or South Carolina</li>
+            <li>The <strong>largest Native American territory</strong> in the United States by land area</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="c3" style="margin-bottom:14px">
+          <div class="stat"><div class="stn">~399K</div><div class="stl">Enrolled Members</div></div>
+          <div class="stat"><div class="stn">~173K</div><div class="stl">Live on Reservation</div></div>
+          <div class="stat"><div class="stn">27,425</div><div class="stl">Square Miles</div></div>
+        </div>
+        <div class="card">
+          <div class="ct">Population Highlights</div>
+          <ul class="b">
+            <li>The <strong>largest Native American nation</strong> in the U.S. by both land area and enrolled population (U.S. Census 2020)</li>
+            <li>The name <em>Navajo</em> likely derives from the Tewa word <em>Navahuu</em>, meaning "large planted fields in the valley"</li>
+            <li>The Diné call themselves <strong>Diné</strong> — simply meaning "The People" in their own language</li>
+            <li>Population is young: median age on the reservation is significantly lower than the U.S. average, reflecting high birth rates and community growth</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 3: HISTORY ══ -->
+<div class="slide" id="s3">
+  <div class="sh"><h2>History</h2><div class="sub">Origins &amp; key events</div></div>
+  <div class="sc">
+    <div class="c2">
+      <div>
+        <div class="card">
+          <div class="ct">Origins — The Diné</div>
+          <ul class="b">
+            <li>The Diné are an <strong>Athabaskan-speaking people</strong> whose ancestors migrated south from northwestern Canada and Alaska around <strong>1000–1400 CE</strong></li>
+            <li>Upon settling in the Four Corners region they adopted farming and weaving from neighboring <strong>Pueblo peoples</strong></li>
+            <li>They became skilled pastoralists, farmers, and artisans in the land they call <strong>Dinétah</strong> (homeland)</li>
+          </ul>
+        </div>
+        <div class="tl">
+          <div class="ti"><div class="ty">~1400s CE</div><div class="tx">Diné settle the Four Corners region; trade and cultural exchange with Pueblo peoples intensifies</div></div>
+          <div class="ti"><div class="ty">1540s</div><div class="tx">First contact with Spanish conquistadors; horses and sheep are introduced — transforming Navajo economy and culture</div></div>
+          <div class="ti"><div class="ty">1680</div><div class="tx">Pueblo Revolt against Spanish rule; Navajo shelter fleeing Pueblo people, deepening cultural and artistic exchange</div></div>
+          <div class="ti"><div class="ty">1848</div><div class="tx">Treaty of Guadalupe Hidalgo transfers the Southwest to U.S. control; military conflict with Navajo escalates</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="ar" style="margin-bottom:13px">
+          <p><strong>The Long Walk (1864–1868):</strong> U.S. Army Col. Kit Carson burned Navajo crops, destroyed orchards, and killed livestock. Between 8,000–10,000 Navajo were forced on a brutal 300-mile march to Bosque Redondo (Fort Sumner), NM. Hundreds died of starvation, disease, and cold. Survivors called it <em>Hwéeldi</em> — "the place of suffering."</p>
+        </div>
+        <div class="tl">
+          <div class="ti"><div class="ty">June 1, 1868</div><div class="tx"><strong>Treaty of Bosque Redondo:</strong> After four years of suffering, the U.S. allowed the Navajo to return to a portion of their ancestral homeland — one of the few tribes permitted to do so</div></div>
+          <div class="ti"><div class="ty">1921</div><div class="tx">Oil discovered on Navajo land; the U.S. restructures tribal governance to control resource access</div></div>
+          <div class="ti"><div class="ty">1942–1945</div><div class="tx"><strong>Navajo Code Talkers</strong> transmit battle communications in their native language — the only military code in modern history never broken by an enemy</div></div>
+          <div class="ti"><div class="ty">1975</div><div class="tx">Indian Self-Determination and Education Assistance Act expands tribal sovereignty and self-governance rights</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 4: CULTURE & TRADITIONS ══ -->
+<div class="slide" id="s4">
+  <div class="sh"><h2>Culture &amp; Traditions</h2><div class="sub">Language, beliefs, clothing &amp; art</div></div>
+  <div class="sc">
+    <div class="c2">
+      <div>
+        <div class="card">
+          <div class="ct">Language — Diné Bizaad</div>
+          <ul class="b">
+            <li>Belongs to the <strong>Athabaskan language family</strong> — tonal, verb-heavy, and structurally unlike European languages</li>
+            <li>Spoken by approximately <strong>170,000 people</strong>; one of the most widely spoken Native American languages in North America</li>
+            <li>Its tonal complexity and intricate verb forms made the Navajo Code <strong>unbreakable</strong> during WWII</li>
+            <li>Immersion schools and bilingual programs actively work to preserve it for younger generations</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ct">Beliefs &amp; Spirituality</div>
+          <ul class="b">
+            <li><strong>Hózhó</strong> (hoh-ZHOH): the central Navajo concept of harmony, balance, beauty, and well-being — the lifelong goal of every Diné person</li>
+            <li><strong>Holy People</strong> (Diyin Diné'é) are spiritual beings who taught the Diné how to live in balance with nature</li>
+            <li>Major ceremonies: <em>Blessing Way</em> (for protection and good fortune), <em>Enemy Way</em> (healing for warriors), and the <em>Night Chant</em> — a 9-night healing ceremony</li>
+            <li><strong>Sand painting</strong>: elaborate ceremonial images created during healing rituals, then ritually destroyed — the process holds the sacred power, not the object</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="ct">Arts &amp; Crafts</div>
+          <ul class="b">
+            <li><strong>Navajo weaving:</strong> World-renowned rugs and blankets feature complex geometric patterns; traditionally created by women on vertical looms passed down through generations</li>
+            <li><strong>Silversmithing:</strong> Developed after Spanish contact in the 1800s; intricate silver and turquoise jewelry is a Navajo cultural symbol recognized worldwide</li>
+            <li>Basketry and pottery complete the traditional craft tradition, each carrying ceremonial as well as practical significance</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ct">Clothing &amp; Dress</div>
+          <ul class="b">
+            <li>Traditional women's dress: <strong>velvet blouses, tiered full skirts</strong>, woven sashes, moccasins, and concha belts</li>
+            <li>Traditional men's wear: <strong>woven or velvet shirts</strong>, moccasins, and elaborately crafted silver and turquoise jewelry</li>
+            <li><strong>Turquoise</strong> holds deep spiritual significance — used in jewelry, ceremonial offerings, and as protective adornment</li>
+            <li>Traditional dress is still proudly worn at ceremonies, powwows, and cultural events</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 5: LIFESTYLE ══ -->
+<div class="slide" id="s5">
+  <div class="sh"><h2>Lifestyle</h2><div class="sub">Food, housing, tools &amp; daily life</div></div>
+  <div class="sc">
+    <div class="c2">
+      <div>
+        <div class="card">
+          <div class="ct">Traditional Food</div>
+          <ul class="b">
+            <li><strong>Three Sisters:</strong> corn, beans, and squash — the cornerstone crops of Navajo agriculture, planted together so each helps the others grow</li>
+            <li><strong>Blue corn</strong> (ground into mush, porridge, and cornbread); white corn used for ceremonial dishes such as hominy stew</li>
+            <li><strong>Mutton (sheep meat):</strong> introduced by the Spanish in the 1600s; mutton stew and ribs became central to Navajo diet and ceremony</li>
+            <li><strong>Fry bread:</strong> born from the Long Walk (1864) when U.S. rations provided only flour, lard, salt, and baking powder; now both a beloved staple and a symbol of resilience and historical pain</li>
+            <li>Wild plants, piñon nuts, juniper berries, and game (deer, rabbit, prairie dog) supplemented the diet</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ct">Tools &amp; Economy</div>
+          <ul class="b">
+            <li>Vertical weaving looms for textiles (wool); drop spindles for spinning yarn</li>
+            <li>Silversmithing tools: steel stamps, dies, and files for jewelry-making</li>
+            <li>Irrigation ditches and check dams to farm in an arid landscape</li>
+            <li>Sheep and goat herding as primary livelihood; horses for transport and trade</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="ct">Housing — The Hogan</div>
+          <ul class="b">
+            <li>The traditional Navajo home is the <strong>hogan</strong> — a one-room structure of wooden logs, bark, and packed mud (or stone)</li>
+            <li>The doorway <strong>always faces east</strong> toward the rising sun, for morning prayers and daily blessings</li>
+            <li>The <strong>round or hexagonal shape</strong> mirrors the cosmos; its open interior symbolizes equality and community — no hierarchy in a circle</li>
+            <li>Hogans remain in use for ceremonies today; many families maintain one alongside a modern home</li>
+            <li>The <strong>sweat lodge (tachééh)</strong> is used separately for physical and spiritual purification</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ct">Social &amp; Daily Life</div>
+          <ul class="b">
+            <li>Traditionally <strong>semi-nomadic pastoralists</strong> — moving herds of sheep and goats between seasonal grazing lands</li>
+            <li>Society is <strong>matrilineal</strong>: children belong to their mother's clan; women owned the hogan, the livestock, and the looms</li>
+            <li>Over <strong>60 clans</strong> govern family structure, marriage rules (you cannot marry within your own or your father's clan), and social obligations</li>
+            <li>Winter <strong>oral storytelling</strong> transmitted history, creation narratives, and moral values across generations — stories are only told after first frost</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 6: MODERN LIFE ══ -->
+<div class="slide" id="s6">
+  <div class="sh"><h2>Modern Life</h2><div class="sub">Current challenges &amp; achievements</div></div>
+  <div class="sc">
+    <div class="c2">
+      <div>
+        <div class="card" style="margin-bottom:0">
+          <div class="ct" style="color:#E05030">⚠ Current Challenges</div>
+          <div class="ar"><p><strong>Poverty &amp; Unemployment:</strong> ~42% unemployment rate vs. ~4% U.S. average; over 30% of residents live below the federal poverty line</p></div>
+          <div class="ar"><p><strong>Infrastructure Gap:</strong> Roughly 30–40% of Navajo homes lack electricity or running water. Many families haul water from community wells miles away</p></div>
+          <div class="ar"><p><strong>COVID-19 (2020):</strong> The Navajo Nation reached one of the highest per-capita COVID infection rates of any U.S. state or territory, driven by overcrowded multigenerational homes, lack of running water for handwashing, and severely underfunded healthcare</p></div>
+          <div class="ar"><p><strong>Uranium Contamination:</strong> Over 500 abandoned uranium mines remain on Navajo land from Cold War-era mining contracts. High cancer rates, contaminated water, and lung disease persist in affected communities decades later</p></div>
+          <div class="ar"><p><strong>Healthcare:</strong> Indian Health Service (IHS) is chronically underfunded at less than half of what the need requires per capita; life expectancy on the reservation is well below the U.S. national average</p></div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:0">
+          <div class="ct" style="color:#4DB8B8">✦ Achievements &amp; Strengths</div>
+          <div class="at"><p><strong>Sovereign Nation:</strong> The Navajo Nation operates its own elected President, 24-member Navajo Nation Council (legislature), independent judiciary, police force, and tribal court system</p></div>
+          <div class="at"><p><strong>Diné College (est. 1968):</strong> The first tribally chartered college in the United States, located in Tsaile, AZ — offering degrees grounded in Navajo language, philosophy, and culture</p></div>
+          <div class="at"><p><strong>Code Talker Recognition:</strong> In 2001, the original 29 Navajo Code Talkers received the Congressional Gold Medal — the highest civilian honor in the United States</p></div>
+          <div class="at"><p><strong>Renewable Energy:</strong> The Navajo Nation is actively developing large-scale wind and solar projects on tribal land, pursuing energy sovereignty after decades of coal dependence</p></div>
+          <div class="at"><p><strong>Language Revival:</strong> Navajo-language immersion schools, bilingual programs, and community media are reversing language loss and passing Diné Bizaad to new generations</p></div>
+          <div class="at"><p><strong>Arts &amp; Tourism Economy:</strong> Monument Valley, Canyon de Chelly, and Navajo artisan markets generate significant revenue and sustain cultural identity and pride</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 7: INTERESTING FACTS ══ -->
+<div class="slide" id="s7">
+  <div class="sh"><h2>Interesting Facts</h2><div class="sub">Unique &amp; surprising</div></div>
+  <div class="sc">
+    <div class="fg">
+      <div class="fc"><div class="fi">🏜</div><div class="ft">Monument Valley</div><div class="fp">The iconic red mesa landscape featured in countless Western films and global advertisements lies <strong>entirely within the Navajo Nation</strong> — the Diné call it Tsé Bii' Ndzisgaii, "Valley of the Rocks"</div></div>
+      <div class="fc"><div class="fi">🔐</div><div class="ft">The Unbreakable Code</div><div class="fp">The Navajo Code was the <strong>only military code in modern history never broken by an enemy</strong>. Japanese cryptographers, who cracked most Allied codes, could never decipher it</div></div>
+      <div class="fc"><div class="fi">⏰</div><div class="ft">The Time Zone Oddity</div><div class="fp">The Navajo Nation <strong>observes Daylight Saving Time</strong>, while the surrounding state of Arizona does not — creating a unique, shifting time difference at the reservation border</div></div>
+      <div class="fc"><div class="fi">🌅</div><div class="ft">Hogans Face East</div><div class="fp">Every traditional hogan has its door facing east so the family can <strong>greet the rising sun in prayer each morning</strong> — a daily ritual connecting people to the sacred natural world</div></div>
+      <div class="fc"><div class="fi">🕷</div><div class="ft">Spider Woman &amp; Weaving</div><div class="fp">Navajo tradition holds that <strong>Spider Woman (Na'ashjé'ii Asdzáá)</strong>, who dwells atop Spider Rock in Canyon de Chelly, taught the Diné how to weave — on a loom whose warp sticks were made from sky and earth</div></div>
+      <div class="fc"><div class="fi">👋</div><div class="ft">No Word for "Goodbye"</div><div class="fp">Navajo has no direct equivalent of "goodbye." Speakers say <strong>"Hágóónee'"</strong> — roughly "I will be seeing you again" — reflecting a worldview where all relationships are continuous, not ended</div></div>
+      <div class="fc"><div class="fi">🐑</div><div class="ft">Sheep Changed Everything</div><div class="fp">When Spanish colonizers introduced sheep in the 1600s, the Navajo transformed into master pastoralists. Sheep wool became the raw material for the <strong>world-renowned Navajo rugs</strong></div></div>
+      <div class="fc"><div class="fi">⚡</div><div class="ft">The Energy Paradox</div><div class="fp">The Navajo Nation sits atop vast coal and natural gas reserves that powered cities across the American Southwest for decades — yet <strong>thousands of Navajo homes still lacked electricity</strong> into the 21st century</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 8: SOURCES ══ -->
+<div class="slide" id="s8">
+  <div class="sh"><h2>Sources</h2><div class="sub">References — APA format</div></div>
+  <div class="sc">
+    <div class="src"><span class="sn">1.</span>Iverson, P. (2002). <em>Diné: A history of the Navajos.</em> University of New Mexico Press.</div>
+    <div class="src"><span class="sn">2.</span>Denetdale, J. N. (2007). <em>Reclaiming Diné history: The legacies of Navajo chief Manuelito and Juanita.</em> University of Arizona Press.</div>
+    <div class="src"><span class="sn">3.</span>National Museum of the American Indian, Smithsonian Institution. (2023). <em>Native peoples of North America: Navajo Nation.</em> https://americanindian.si.edu</div>
+    <div class="src"><span class="sn">4.</span>U.S. Census Bureau. (2023). <em>2020 Census: American Indian and Alaska Native populations.</em> U.S. Department of Commerce. https://www.census.gov/topics/population/race/about.html</div>
+    <div class="src"><span class="sn">5.</span>Brugge, D., &amp; Goble, R. (2002). The history of uranium mining and the Navajo people. <em>American Journal of Public Health, 92</em>(9), 1410–1419. https://doi.org/10.2105/ajph.92.9.1410</div>
+    <div class="src"><span class="sn">6.</span>Kelley, K. B., &amp; Francis, H. (1994). <em>Navajo sacred places.</em> Indiana University Press.</div>
+    <div class="src"><span class="sn">7.</span>Navajo Nation Department of Water Resources. (2021). <em>Water resource development program annual report.</em> Window Rock, AZ: Navajo Nation.</div>
+    <div class="src"><span class="sn">8.</span>Meadows, W. C. (2002). <em>The Comanche Code Talkers of World War II.</em> University of Texas Press. [Chapter 2 provides comparative context on Navajo Code Talker program documentation.]</div>
+    <div style="margin-top:14px;padding:11px 16px;border:1px solid rgba(45,138,138,.28);border-radius:6px;font-size:.8rem;color:var(--teal-lt);font-style:italic">
+      All sources are peer-reviewed scholarly works, authored or co-authored by Diné scholars, or published by federal agencies. Content also cross-referenced with the official Navajo Nation Government website (navajo-nsn.gov).
+    </div>
+  </div>
+</div>
+
+</div><!-- /stage -->
+<div class="band b2"></div>
+<div id="ctrl">
+  <button class="btn" id="prev" onclick="go(-1)" disabled>← Previous</button>
+  <span id="ctr">1 / 8</span>
+  <button class="btn" id="next" onclick="go(1)">Next →</button>
+</div>
+</div><!-- /app -->
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+let cur = 0;
+
+function go(dir) {
+  const nxt = cur + dir;
+  if (nxt < 0 || nxt >= slides.length) return;
+  slides[cur].classList.remove('active');
+  cur = nxt;
+  slides[cur].classList.add('active');
+  const sc = slides[cur].querySelector('.sc');
+  if (sc) sc.scrollTop = 0;
+  document.getElementById('ctr').textContent = (cur + 1) + ' / ' + slides.length;
+  document.getElementById('prev').disabled = cur === 0;
+  document.getElementById('next').disabled = cur === slides.length - 1;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(-1);
+});
+</script>
+</body>
+</html>
