@@ -105,7 +105,7 @@
       display: flex; align-items: center; justify-content: center;
       overflow: hidden;
     }
-    #hero-img { width:100%;height:100%;object-fit:cover;opacity:0.55;display:none; }
+    #hero-img { width:100%;height:100%;object-fit:cover;opacity:1;display:none; }
     #hero-placeholder {
       display: flex; flex-direction: column; align-items: center;
       color: rgba(201,168,76,0.6); gap: 0.8rem; pointer-events: none;
@@ -136,17 +136,6 @@
       font-family:'Playfair Display',serif;
       font-size:clamp(1rem,2.5vw,1.4rem);
       color:var(--gold-light); letter-spacing:0.05em;
-    }
-    .hero-upload-hint {
-      position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
-      z-index:2; color:rgba(253,248,240,0.5);
-      font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase;
-      display:flex; align-items:center; gap:0.5rem;
-      animation:bounce 2s infinite; white-space:nowrap;
-    }
-    @keyframes bounce {
-      0%,100%{transform:translateX(-50%) translateY(0)}
-      50%{transform:translateX(-50%) translateY(-6px)}
     }
     #hero-input { display:none; }
 
@@ -385,7 +374,6 @@
           <circle cx="8.5" cy="8.5" r="1.5"/>
           <polyline points="21 15 16 10 5 21"/>
         </svg>
-        <span>Click to upload class photo</span>
       </div>
       <img id="hero-img" alt="Class 9B photo" src="https://i.imgur.com/GQMmHhD.jpg" style="display:block;" />
     </div>
@@ -393,15 +381,7 @@
     <div class="hero-content">
       <p class="hero-eyebrow">In memory &amp; gratitude</p>
       <h1 class="hero-title">To the one who<br/>believed in us</h1>
-      <p class="hero-class">9B &mdash; 2022 / 2024</p>
-    </div>
-    <div class="hero-upload-hint">
-      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-           fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
-        <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
-      </svg>
-      Click anywhere to upload class photo
+      <p class="hero-class">9B &mdash; 2024 / 2026</p>
     </div>
     <input type="file" id="hero-input" accept="image/*" />
   </section>
@@ -420,7 +400,6 @@
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                 <circle cx="12" cy="7" r="4"/>
               </svg>
-              <span>Click to upload photo</span>
             </div>
             <img id="about-img" alt="Aibek Kudaibergenov" src="https://i.imgur.com/ukArzwe.jpg" style="display:block;" />
           </div>
@@ -521,6 +500,7 @@
     heroImg.src = URL.createObjectURL(file);
     heroImg.style.display = 'block';
     heroPh.style.display  = 'none';
+    document.querySelector('.hero-overlay').style.opacity = '0';
   });
 
   /* ABOUT PHOTO */
@@ -558,29 +538,23 @@
     camSvg.setAttribute('stroke-linejoin','round');
     camSvg.innerHTML = '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>';
 
-    const hint = document.createElement('span');
-    hint.textContent = 'Add photo';
-
     const img = document.createElement('img');
     img.alt = name;
 
     const fileIn = document.createElement('input');
     fileIn.type = 'file';
     fileIn.accept = 'image/*';
+    fileIn.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2;';
 
-    photoDiv.append(camSvg, hint, img, fileIn);
+    photoDiv.append(camSvg, img, fileIn);
 
-    photoDiv.addEventListener('click', e => {
-      e.stopPropagation();
-      fileIn.click();
-    });
     fileIn.addEventListener('change', ev => {
       const file = ev.target.files[0];
       if (!file) return;
       img.src = URL.createObjectURL(file);
       img.style.display = 'block';
       camSvg.style.display = 'none';
-      hint.style.display   = 'none';
+      fileIn.style.display = 'none';
     });
 
     /* name input */
